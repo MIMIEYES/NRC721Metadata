@@ -28,7 +28,6 @@ import io.nuls.contract.sdk.Msg;
 import io.nuls.contract.sdk.annotation.View;
 import io.nuls.token.interfaces.INRC721;
 import io.nuls.token.model.Counter;
-import io.nuls.token.role.Minter;
 
 import java.math.BigInteger;
 import java.util.HashMap;
@@ -41,12 +40,16 @@ import static io.nuls.contract.sdk.Utils.require;
  * @author: PierreLuo
  * @date: 2019-06-04
  */
-public class NRC721Base extends Minter implements INRC721 {
+public class NRC721Base extends NRC165Base implements INRC721 {
 
     private Map<BigInteger, Address> tokenOwner = new HashMap<BigInteger, Address>();
     private Map<BigInteger, Address> tokenApprovals = new HashMap<BigInteger, Address>();
     private Map<Address, Counter> ownedTokensCount = new HashMap<Address, Counter>();
     private Map<Address, Map<Address, Boolean>> operatorApprovals = new HashMap<Address, Map<Address, Boolean>>();
+
+    public NRC721Base() {
+        super.registerInterface("INRC721");
+    }
 
     @Override
     @View
@@ -71,6 +74,7 @@ public class NRC721Base extends Minter implements INRC721 {
         transferFrom(from, to, tokenId);
         // checkOnNRC721Received 的作用是当to是合约地址时，那么to这个合约必须实现`onNRC721Received`函数 / data 的作用是附加备注
         require(checkOnNRC721Received(from, to, tokenId, data), "NRC721: transfer to non NRC721Receiver implementer");
+
     }
 
     @Override
@@ -134,8 +138,6 @@ public class NRC721Base extends Minter implements INRC721 {
         return isApproved;
     }
 
-
-
     protected boolean checkOnNRC721Received(Address from, Address to, BigInteger tokenId, String data) {
         if(!to.isContract()) {
             return true;
@@ -179,7 +181,6 @@ public class NRC721Base extends Minter implements INRC721 {
     }
 
     protected void mintBase(Address to, BigInteger tokenId) {
-        onlyMinter();
         require(!exists(tokenId), "NRC721: token already minted");
 
         tokenOwner.put(tokenId, to);
