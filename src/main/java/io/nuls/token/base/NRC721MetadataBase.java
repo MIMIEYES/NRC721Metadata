@@ -77,4 +77,9 @@ public class NRC721MetadataBase extends NRC721Base implements INRC721Metadata {
         super.burnBase(owner, tokenId);
         tokenURIs.remove(tokenId);
     }
+
+    protected void mintWithTokenURIBase(Address to, BigInteger tokenId, String tokenURI) {
+        this.setTokenURI(tokenId, tokenURI);
+        super.mintBase(to, tokenId);
+    }
 }

@@ -50,8 +50,7 @@ public class NRC721Metadata extends NRC721MetadataBase implements Contract {
 
     public boolean mintWithTokenURI(Address to, BigInteger tokenId, String tokenURI) {
         onlyMinter();
-        super.mintBase(to, tokenId);
-        super.setTokenURI(tokenId, tokenURI);
+        super.mintWithTokenURIBase(to, tokenId, tokenURI);
         return true;
     }
 
