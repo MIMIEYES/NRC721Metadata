@@ -26,6 +26,7 @@ package io.nuls.token;
 import io.nuls.contract.sdk.Address;
 import io.nuls.contract.sdk.Contract;
 import io.nuls.contract.sdk.Msg;
+import io.nuls.contract.sdk.annotation.Required;
 import io.nuls.token.base.NRC721MetadataBase;
 
 import java.math.BigInteger;
@@ -38,23 +39,23 @@ import static io.nuls.contract.sdk.Utils.require;
  */
 public class NRC721Metadata extends NRC721MetadataBase implements Contract {
 
-    public NRC721Metadata(String name, String symbol) {
+    public NRC721Metadata(@Required String name, @Required String symbol) {
         super(name, symbol);
     }
 
-    public boolean mint(Address to, BigInteger tokenId) {
+    public boolean mint(@Required Address to, @Required BigInteger tokenId) {
         onlyMinter();
         super.mintBase(to, tokenId);
         return true;
     }
 
-    public boolean mintWithTokenURI(Address to, BigInteger tokenId, String tokenURI) {
+    public boolean mintWithTokenURI(@Required Address to, @Required BigInteger tokenId, @Required String tokenURI) {
         onlyMinter();
         super.mintWithTokenURIBase(to, tokenId, tokenURI);
         return true;
     }
 
-    public void burn(Address owner, BigInteger tokenId) {
+    public void burn(@Required Address owner, @Required BigInteger tokenId) {
         require(isApprovedOrOwner(Msg.sender(), tokenId), "NRC721: transfer caller is not owner nor approved");
         super.burnBase(owner, tokenId);
     }
