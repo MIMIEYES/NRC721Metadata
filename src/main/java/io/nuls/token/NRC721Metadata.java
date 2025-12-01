@@ -60,4 +60,24 @@ public class NRC721Metadata extends NRC721MetadataBase implements Contract {
         super.burnBase(owner, tokenId);
     }
 
+    public boolean batchMint(@Required String[] tos, @Required String[] tokenIds) {
+        onlyMinter();
+        require(tos.length <= 100, "max size: 100.");
+        require(tos.length == tokenIds.length, "array size error.");
+        for (int i = 0;i<tos.length;i++) {
+            super.mintBase(new Address(tos[i]), new BigInteger(tokenIds[i]));
+        }
+        return true;
+    }
+
+    public boolean batchMintWithTokenURI(@Required String[] tos, @Required String[] tokenIds, @Required String[] tokenURIs) {
+        onlyMinter();
+        require(tos.length <= 100, "max size: 100.");
+        require(tos.length == tokenIds.length && tokenIds.length == tokenURIs.length, "array size error.");
+        for (int i = 0;i<tos.length;i++) {
+            super.mintWithTokenURIBase(new Address(tos[i]), new BigInteger(tokenIds[i]), tokenURIs[i]);
+        }
+        return true;
+    }
+
 }
